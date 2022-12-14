@@ -6,8 +6,8 @@ namespace PolymorphicDtoApi.Models
     {
         public string? Name { get; set; }
 
-        public virtual WarriorTypeEnum TypeDiscriminator { get; }
+        public virtual string BestAttack { get => "hands"; }
 
-        public virtual string BestAttack { get => string.Empty; }
+        public string Type => this.GetType().Name;
     }
 }
