@@ -1,11 +1,15 @@
 using PolymorphicDtoApi.Code;
+using PolymorphicDtoApi.Models.Warrior;
+using PolymorphicDtoApi.Polymorph;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+var warriorTypeDiscriminator = new WarriorTypeDiscriminator();
+builder.Services.AddSingleton(warriorTypeDiscriminator);
 builder.Services.AddControllers()
-                .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new WarriorPolymorphicJsonConverter()));
+                .AddPolymorphJsonConverter<BaseWarriorDto>(warriorTypeDiscriminator)
 ;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

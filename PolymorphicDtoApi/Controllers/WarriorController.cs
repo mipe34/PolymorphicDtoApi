@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PolymorphicDtoApi.Code;
-using PolymorphicDtoApi.Models;
+using PolymorphicDtoApi.Models.Warrior;
+using PolymorphicDtoApi.Polymorph;
 
 namespace PolymorphicDtoApi.Controllers
 {
@@ -10,19 +11,26 @@ namespace PolymorphicDtoApi.Controllers
     {
         private static readonly List<BaseWarriorDto> warriors = new List<BaseWarriorDto>
         {
-            new PeasantDto{Name = "Mamoko Otuna"},
+            new PeasantDto{Name = "Morihei Ueshiba"},
             new NinjaDto{Name = "Hatori Hanzo", SpecialAbility = "Poison"},
             new SamuraiDto{Name = "Oda Nobunaga"}
         };
 
+        private readonly WarriorTypeDiscriminator warriorTypeDiscriminator;
 
-        //[HttpGet]
-        //public IActionResult GetWarrior(string warriorType)
-        //{
-        //    var warrior = warriors.FirstOrDefault(x => string.Equals(x.WarriorType.ToString(), warriorType, StringComparison.InvariantCultureIgnoreCase));
-        //    if (warrior == null) return NotFound();
-        //    return Ok(warrior);
-        //}
+        public WarriorController(WarriorTypeDiscriminator warriorTypeDiscriminator)
+        {
+            this.warriorTypeDiscriminator = warriorTypeDiscriminator;
+        }
+
+        [HttpGet]
+        public IActionResult GetWarrior(string name)
+        {
+            var warrior = warriors.FirstOrDefault(x => string.Equals(x.Name, name, StringComparison.InvariantCultureIgnoreCase));
+            if (warrior == null) return NotFound();
+            var result = new PolymorphDto<BaseWarriorDto>(warriorTypeDiscriminator.GetTypeDiscriminator(warrior.GetType()), warrior);
+            return Ok(result);
+        }
 
         [HttpGet]
         [Route("list")]
@@ -33,9 +41,9 @@ namespace PolymorphicDtoApi.Controllers
 
 
         [HttpPost]
-        public IActionResult CreateWarrior(BaseWarriorDto warrior)
+        public IActionResult CreateWarrior(PolymorphDto<BaseWarriorDto> warrior)
         {
-            warriors.Add(warrior);
+            warriors.Add(warrior.TypeValue);
             return Ok(warrior);
         }
     }

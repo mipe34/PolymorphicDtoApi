@@ -1,11 +1,9 @@
 ﻿using PolymorphicDtoApi.Code;
 
-namespace PolymorphicDtoApi.Models
+namespace PolymorphicDtoApi.Models.Warrior
 {
     public class SamuraiDto : BaseWarriorDto
     {
-        public override WarriorTypeEnum TypeDiscriminator => WarriorTypeEnum.Samurai;
-
         public override string BestAttack => "katana";
 
     }
