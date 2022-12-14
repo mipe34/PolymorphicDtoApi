@@ -6,12 +6,12 @@ using System.Text.Json.Serialization;
 namespace PolymorphicDtoApi.Polymorph
 {
     public class PolymorphJsonConverter<T> : JsonConverter<PolymorphDto<T>> where T : class, new()
-    { 
-        private Func<int, Type> getTypeFunc;
+    {
+        ITypeDiscriminator typeDiscriminator;
 
-        public PolymorphJsonConverter(Func<int, Type> getTypeFunc)
+        public PolymorphJsonConverter(ITypeDiscriminator typeDiscriminator)
         {
-            this.getTypeFunc = getTypeFunc;
+            this.typeDiscriminator = typeDiscriminator;
         }
 
         public override PolymorphDto<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -34,8 +34,8 @@ namespace PolymorphicDtoApi.Polymorph
                 throw new JsonException($"Cannot read type discriminator value.");
             }
 
-            var typeDiscriminator = reader.GetInt32();
-            var type = getTypeFunc(typeDiscriminator);
+            var typeDiscriminatorValue = reader.GetInt32();
+            var type = typeDiscriminator.GetType(typeDiscriminatorValue);
 
             if (!reader.Read()
                     || reader.TokenType != JsonTokenType.PropertyName
@@ -58,7 +58,7 @@ namespace PolymorphicDtoApi.Polymorph
                 throw new JsonException("Unexpected json ending. Expected end of json");
             }
 
-            var result = new PolymorphDto<T>(typeDiscriminator, typeValue);
+            var result = new PolymorphDto<T>(typeDiscriminatorValue, typeValue);
             return result;
         }
 

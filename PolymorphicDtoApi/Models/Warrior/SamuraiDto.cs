@@ -1,6 +1,6 @@
 ﻿using PolymorphicDtoApi.Code;
 
-namespace PolymorphicDtoApi.Models
+namespace PolymorphicDtoApi.Models.Warrior
 {
     public class SamuraiDto : BaseWarriorDto
     {

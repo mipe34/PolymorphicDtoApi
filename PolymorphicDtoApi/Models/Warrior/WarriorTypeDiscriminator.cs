@@ -1,8 +1,9 @@
 ﻿using PolymorphicDtoApi.Code;
+using PolymorphicDtoApi.Polymorph;
 
-namespace PolymorphicDtoApi.Models
+namespace PolymorphicDtoApi.Models.Warrior
 {
-    public class WarriorTypeDiscrimination
+    public class WarriorTypeDiscriminator : ITypeDiscriminator
     {
         private static readonly Dictionary<WarriorTypeEnum, Type> typeDiscriminationDictionary = new Dictionary<WarriorTypeEnum, Type>()
         {
@@ -11,14 +12,14 @@ namespace PolymorphicDtoApi.Models
             { WarriorTypeEnum.Ninja, typeof(NinjaDto)},
         };
 
-        public static Type GetType(int typeDiscriminator)
+        public Type GetType(int typeDiscriminator)
         {
             return typeDiscriminationDictionary[(WarriorTypeEnum)typeDiscriminator];
         }
 
-        public static int GetTypeDiscriminator(Type type)
+        public int GetTypeDiscriminator(Type type)
         {
-            return (int) typeDiscriminationDictionary.First(x=> x.Value == type).Key;
+            return (int)typeDiscriminationDictionary.First(x => x.Value == type).Key;
         }
     }
 }

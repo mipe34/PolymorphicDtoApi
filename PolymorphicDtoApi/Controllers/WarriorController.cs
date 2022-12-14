@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PolymorphicDtoApi.Code;
-using PolymorphicDtoApi.Models;
+using PolymorphicDtoApi.Models.Warrior;
 using PolymorphicDtoApi.Polymorph;
 
 namespace PolymorphicDtoApi.Controllers
@@ -16,13 +16,19 @@ namespace PolymorphicDtoApi.Controllers
             new SamuraiDto{Name = "Oda Nobunaga"}
         };
 
+        private readonly WarriorTypeDiscriminator warriorTypeDiscriminator;
+
+        public WarriorController(WarriorTypeDiscriminator warriorTypeDiscriminator)
+        {
+            this.warriorTypeDiscriminator = warriorTypeDiscriminator;
+        }
 
         [HttpGet]
         public IActionResult GetWarrior(string name)
         {
             var warrior = warriors.FirstOrDefault(x => string.Equals(x.Name, name, StringComparison.InvariantCultureIgnoreCase));
             if (warrior == null) return NotFound();
-            var result = new PolymorphDto<BaseWarriorDto>(WarriorTypeDiscrimination.GetTypeDiscriminator(warrior.GetType()), warrior);
+            var result = new PolymorphDto<BaseWarriorDto>(warriorTypeDiscriminator.GetTypeDiscriminator(warrior.GetType()), warrior);
             return Ok(result);
         }
 

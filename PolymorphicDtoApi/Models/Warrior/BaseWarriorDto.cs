@@ -1,6 +1,6 @@
 ﻿using PolymorphicDtoApi.Code;
 
-namespace PolymorphicDtoApi.Models
+namespace PolymorphicDtoApi.Models.Warrior
 {
     public class BaseWarriorDto
     {
@@ -8,6 +8,6 @@ namespace PolymorphicDtoApi.Models
 
         public virtual string BestAttack { get => "hands"; }
 
-        public string Type => this.GetType().Name;
+        public string Type => GetType().Name;
     }
 }
