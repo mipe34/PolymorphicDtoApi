@@ -1,5 +1,6 @@
 ﻿using PolymorphicDtoApi.Code;
 using PolymorphicDtoApi.Models;
+using PolymorphicDtoApi.Models.Warrior;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -65,7 +66,15 @@ namespace PolymorphicDtoApi.Polymorph
         public override void Write(Utf8JsonWriter writer, PolymorphDto<T> value, JsonSerializerOptions options)
         {
             var optionsCopy = CleanOptions(options);
-            JsonSerializer.Serialize(writer, value, optionsCopy);
+
+            writer.WriteStartObject();
+
+            writer.WriteNumber("TypeDiscriminator", value.TypeDiscriminator);
+
+            writer.WritePropertyName("TypeValue");
+            JsonSerializer.Serialize(writer, value.TypeValue, value.TypeValue.GetType(), options);
+
+            writer.WriteEndObject();
         }
 
         private static JsonSerializerOptions CleanOptions(JsonSerializerOptions options)
