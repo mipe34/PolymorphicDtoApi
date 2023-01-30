@@ -1,4 +1,5 @@
 ﻿using PolymorphicDtoApi.Code;
+using PolymorphicDtoApi.Models.Warrior.SpecialAbility;
 
 namespace PolymorphicDtoApi.Models.Warrior
 {
@@ -6,6 +7,6 @@ namespace PolymorphicDtoApi.Models.Warrior
     {
         public override string BestAttack => "shuriken";
 
-        public string? SpecialAbility { get; set; }
+        public PoisonSpecialAbility? SpecialAbility { get; set; } = new PoisonSpecialAbility();
     }
 }

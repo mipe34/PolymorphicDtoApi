@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PolymorphicDtoApi.Code;
 using PolymorphicDtoApi.Models.Warrior;
+using PolymorphicDtoApi.Models.Warrior.SpecialAbility;
 using PolymorphicDtoApi.Polymorph;
 
 namespace PolymorphicDtoApi.Controllers
@@ -12,8 +13,8 @@ namespace PolymorphicDtoApi.Controllers
         private static readonly List<BaseWarriorDto> warriors = new List<BaseWarriorDto>
         {
             new PeasantDto{Name = "Morihei Ueshiba"},
-            new NinjaDto{Name = "Hatori Hanzo", SpecialAbility = "Poison"},
-            new SamuraiDto{Name = "Oda Nobunaga"}
+            new NinjaDto{Name = "Hatori Hanzo", SpecialAbility = new PoisonSpecialAbility{PoisonStrength = 10 } },
+            new SamuraiDto{Name = "Oda Nobunaga", SpecialAbility = new RideHorseSpecialAbility() {Speed = 66} }
         };
 
         private readonly WarriorTypeDiscriminator warriorTypeDiscriminator;
