@@ -72,15 +72,22 @@ namespace PolymorphicDtoApi.Polymorph
             writer.WriteNumber("TypeDiscriminator", value.TypeDiscriminator);
 
             writer.WritePropertyName("TypeValue");
-            JsonSerializer.Serialize(writer, value.TypeValue, value.TypeValue.GetType(), options);
+            JsonSerializer.Serialize(writer, value.TypeValue, value.TypeValue.GetType(), optionsCopy);
 
             writer.WriteEndObject();
+        }
+
+        public override bool CanConvert(Type typeToConvert)
+        {
+            var canConvert = typeToConvert.IsAssignableTo(typeof(PolymorphDto<T>));
+            return canConvert;
         }
 
         private static JsonSerializerOptions CleanOptions(JsonSerializerOptions options)
         {
             var optionsCopy = new JsonSerializerOptions(options);
-            optionsCopy.Converters.Clear();
+            var thisConverter = optionsCopy.Converters.Single(x=> x.CanConvert(typeof(PolymorphDto<T>)));
+            optionsCopy.Converters.Remove(thisConverter);
             return optionsCopy;
         }
     }
